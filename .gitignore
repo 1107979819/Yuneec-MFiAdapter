@@ -26,3 +26,4 @@ Pods/
 Carthage/
 
 *.xcuserstate
+.DS_Store
