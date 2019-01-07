@@ -8,7 +8,7 @@ This repo also uses submodule c_library_v2, which should be fetched using comman
 ```
 git submodule update --init
 ```
-An example usage of these frameworks can be found in [YUNEEC/MFiExample](https://github.com/YUNEEC/MFiExample/).
+An example usage of these frameworks can be found in [YUNEEC/MFiExample](https://github.com/YUNEEC/MFiExample/). More information about the ST10C Remote Controller can be found [here](https://developer.yuneec.com/documentation/127/Remote-Controller).
 
 ## Frameworks
 
@@ -67,4 +67,4 @@ Then, to pull in the library and build it, run Carthage in your app's repository
 carthage bootstrap --platform ios --use-ssh
 ```
 
-This command also needs to be re-run if you want to udpate the framework.  
+This command also needs to be re-run if you want to update the framework.  
