@@ -1,7 +1,13 @@
 # Yuneec-MFiAdapter
 
-This repo contains all the pieces needed to talk to the ST10C Remote Controller.
-
+This repo contains all the pieces needed to talk to the ST10C Remote Controller. The source of this framework can be fetched using command:
+```
+git clone https://github.com/YUNEEC/Yuneec-MFiAdapter.git
+```
+This repo also uses submodule c_library_v2, which should be fetched using command:
+```
+git submodule update --init
+```
 An example usage of these frameworks can be found in [YUNEEC/MFiExample](https://github.com/YUNEEC/MFiExample/).
 
 ## Frameworks
