@@ -31,7 +31,9 @@ To install carthage, it's easiest to use [Homebrew](https://brew.sh/):
 brew install carthage
 ```
 
-Then to add the framework, create the file `Cartfile` in your app's repository with below's content:
+Then to add the framework: 
+
+* Create the file `Cartfile` in your app's repository with below's content:
 
 ```
 # Require the iOS framework of Yuneec-MFiAdapter
@@ -44,9 +46,9 @@ Then, to pull in the library and build it, run Carthage in your app's repository
 carthage update
 ```
 
-This command also needs to be re-run if you want to udpate the framework.  
+This command needs to be re-run if you want to udpate the framework.  
 
-Or create the file `Cartfile.resolved` in your app's repository with below content:
+* Or create the file `Cartfile.resolved` in your app's repository with below content:
 
 ```
 # Require the iOS framework of Yuneec-MFiAdapter
@@ -58,3 +60,5 @@ Then, to pull in the library and build it, run Carthage in your app's repository
 ```
 carthage bootstrap --platform ios --use-ssh
 ```
+
+This command also needs to be re-run if you want to udpate the framework.  
