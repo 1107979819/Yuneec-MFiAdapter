@@ -58,7 +58,7 @@ This command needs to be re-run if you want to udpate the framework.
 
 ```
 # Require the iOS framework of Yuneec-MFiAdapter
-github "YUNEEC/Yuneec-MFiAdapter" "c555d9fdc73d364a29653cd7dd9701d639403064"
+github "YUNEEC/Yuneec-MFiAdapter" "some-commit"
 ```
 
 Then, to pull in the library and build it, run Carthage in your app's repository:
