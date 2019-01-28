@@ -18,3 +18,4 @@ FOUNDATION_EXPORT const unsigned char MFiAdapterVersionString[];
 #import <MFiAdapter/MFiRemoteControllerAdapter.h>
 #import <MFiAdapter/MFiCameraAdapter.h>
 #import <MFiAdapter/MFiOtaAdapter.h>
+#import <MFiAdapter/MFiPreviewViewAdapter.h>

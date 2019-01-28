@@ -13,6 +13,8 @@
 		086D7B282119F4D200F7F739 /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 086D7B272119F4D200F7F739 /* CocoaAsyncSocket.framework */; };
 		08CDA79D2098A2F1005702F9 /* MFiConnectionStateAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CDA79B2098A2F0005702F9 /* MFiConnectionStateAdapter.m */; };
 		08CDA79E2098A2F1005702F9 /* MFiConnectionStateAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 08CDA79C2098A2F1005702F9 /* MFiConnectionStateAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9B97830321FFB56E005D193A /* MFiPreviewViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B97830121FFB56D005D193A /* MFiPreviewViewAdapter.m */; };
+		9B97830421FFB56E005D193A /* MFiPreviewViewAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B97830221FFB56D005D193A /* MFiPreviewViewAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9BE6123E21E3CC1800684859 /* FFMpegDemuxer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE6123121E3CC1700684859 /* FFMpegDemuxer.framework */; };
 		9BE6123F21E3CC1800684859 /* YuneecCameraSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE6123221E3CC1700684859 /* YuneecCameraSDK.framework */; };
 		9BE6124021E3CC1800684859 /* YuneecDecoder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BE6123321E3CC1800684859 /* YuneecDecoder.framework */; };
@@ -46,6 +48,8 @@
 		086D7B272119F4D200F7F739 /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
 		08CDA79B2098A2F0005702F9 /* MFiConnectionStateAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFiConnectionStateAdapter.m; sourceTree = "<group>"; };
 		08CDA79C2098A2F1005702F9 /* MFiConnectionStateAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFiConnectionStateAdapter.h; sourceTree = "<group>"; };
+		9B97830121FFB56D005D193A /* MFiPreviewViewAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFiPreviewViewAdapter.m; sourceTree = "<group>"; };
+		9B97830221FFB56D005D193A /* MFiPreviewViewAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFiPreviewViewAdapter.h; sourceTree = "<group>"; };
 		9BE6123121E3CC1700684859 /* FFMpegDemuxer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FFMpegDemuxer.framework; sourceTree = "<group>"; };
 		9BE6123221E3CC1700684859 /* YuneecCameraSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YuneecCameraSDK.framework; sourceTree = "<group>"; };
 		9BE6123321E3CC1800684859 /* YuneecDecoder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YuneecDecoder.framework; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 		083C905520939D5200537818 /* MFiAdapter */ = {
 			isa = PBXGroup;
 			children = (
+				9B97830221FFB56D005D193A /* MFiPreviewViewAdapter.h */,
+				9B97830121FFB56D005D193A /* MFiPreviewViewAdapter.m */,
 				083C905620939D5200537818 /* MFiAdapter.h */,
 				083C905720939D5200537818 /* Info.plist */,
 				086D32CD20B70158006840C1 /* MFiRemoteControllerAdapter.h */,
@@ -167,6 +173,7 @@
 				083C905820939D5200537818 /* MFiAdapter.h in Headers */,
 				086D32CE20B70158006840C1 /* MFiRemoteControllerAdapter.h in Headers */,
 				D8B0900D212D337C00006BC5 /* MFiCameraAdapter.h in Headers */,
+				9B97830421FFB56E005D193A /* MFiPreviewViewAdapter.h in Headers */,
 				08CDA79E2098A2F1005702F9 /* MFiConnectionStateAdapter.h in Headers */,
 				D8053E9A2159FF080046596C /* MFiOtaAdapter.h in Headers */,
 				D8B09011212D33AA00006BC5 /* MFiMediaDownload.h in Headers */,
@@ -245,6 +252,7 @@
 				086D32D020B70163006840C1 /* MFiRemoteControllerAdapter.m in Sources */,
 				D8728A2A215B527700137272 /* MFiHttp.m in Sources */,
 				D8B09012212D33AA00006BC5 /* MFiMediaDownload.m in Sources */,
+				9B97830321FFB56E005D193A /* MFiPreviewViewAdapter.m in Sources */,
 				D8B0900E212D337C00006BC5 /* MFiCameraAdapter.m in Sources */,
 				08CDA79D2098A2F1005702F9 /* MFiConnectionStateAdapter.m in Sources */,
 			);
