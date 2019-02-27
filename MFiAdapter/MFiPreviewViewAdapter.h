@@ -22,6 +22,8 @@
 /**
  * Start live video stream from the camera
  *
+ * @param previewView View of type YuneecPreviewView to display the video
+ * @param completionCallback Completion function block
  */
 - (void) startVideo:(YuneecPreviewView *)previewView
  completionCallback:(void(^_Nullable)(NSString * _Nullable error))completionCallback;
@@ -29,6 +31,7 @@
 /**
  * Stop live video stream from the camera
  *
+ * @param completionCallback Completion function block
  */
 - (void) stopVideo:(void(^_Nullable)(NSString * _Nullable error))completionCallback;
 
