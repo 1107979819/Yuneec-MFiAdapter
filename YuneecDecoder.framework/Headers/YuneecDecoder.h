@@ -46,6 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)decoder:(YuneecDecoder *) decoder didChangeVideoWidth:(uint32_t) videoWidth videoHeight:(uint32_t) videoHeight;
 
+/**
+ * the decoder send sampleBufferRef
+ *
+ *
+ * @param decoder the decoder instance
+ * @param sampleBufferRef ponit of raw video sampleBufferRef
+ * @param isIDR flag of IDR frame
+ */
+- (void)decoder:(YuneecDecoder *) decoder didSendBufferFrame:(CMSampleBufferRef)sampleBufferRef IsIDR:(BOOL)isIDR;
+
 @end
 
 @interface YuneecDecoder : NSObject

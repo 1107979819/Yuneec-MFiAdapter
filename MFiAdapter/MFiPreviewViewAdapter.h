@@ -6,8 +6,14 @@
 //  Copyright © 2018 yuneec. All rights reserved.
 //
 
+
 #import <Foundation/Foundation.h>
 #import <YuneecPreviewView/YuneecPreviewView.h>
+
+// weakSelf
+#ifndef WS
+#define WS(weakSelf)  __weak __typeof(self) weakSelf = self
+#endif
 
 /// This interface provides methods to display live video stream from camera
 @interface MFiPreviewViewAdapter : NSObject
@@ -22,8 +28,6 @@
 /**
  * Start live video stream from the camera
  *
- * @param previewView View of type YuneecPreviewView to display the video
- * @param completionCallback Completion function block
  */
 - (void) startVideo:(YuneecPreviewView *)previewView
  completionCallback:(void(^_Nullable)(NSString * _Nullable error))completionCallback;
@@ -31,8 +35,13 @@
 /**
  * Stop live video stream from the camera
  *
- * @param completionCallback Completion function block
  */
 - (void) stopVideo:(void(^_Nullable)(NSString * _Nullable error))completionCallback;
+
+/**
+ * update live video stream display window
+ *
+ */
+- (void) updateDisplayRect:(CGRect) DisplayRect;
 
 @end
