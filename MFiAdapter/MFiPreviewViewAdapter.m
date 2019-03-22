@@ -9,18 +9,24 @@
 #import "MFiPreviewViewAdapter.h"
 #import "MFiConnectionStateAdapter.h"
 #import <YuneecDataTransferManager/YuneecDataTransferManager.h>
-#import <YuneecDecoder/YuneecDecoder.h>
 #import <YuneecPreviewView/YuneecPreviewView.h>
 #import <YuneecDataTransferManager/YuneecDataTransferConnectionState.h>
 #import <BaseFramework/DeviceUtility.h>
+#import <YuneecMediaPlayer/YuneecMediaPlayer.h>
+#import <VideoBufferPlayView.h>
 
-@interface MFiPreviewViewAdapter () <YuneecCameraStreamDataTransferDelegate,
-YuneecDecoderDelegate>
+
+@interface MFiPreviewViewAdapter () <MediaPlayerDelegate>
 
 @property (weak, nonatomic) YuneecPreviewView      *previewView;
 
-@property (strong, nonatomic) YuneecDecoder                 *decoder;
-@property (weak, nonatomic) YuneecCameraStreamDataTransfer  *cameraStreamTransfer;
+/* display rect is the size/pos of display content with ratio */
+@property (nonatomic, assign)                       CGRect previewDisplayRect;
+
+///< Video Buffer play view
+@property(nonatomic,strong)VideoBufferPlayView                      *mainVideoView;
+@property(nonatomic,strong)VideoBufferPlayView                      *pipVideoView;
+@property (nonatomic, assign) BOOL                                  isCompressData;;
 @end
 
 @implementation MFiPreviewViewAdapter
@@ -36,19 +42,22 @@ YuneecDecoderDelegate>
 
 -(void) startVideo:(YuneecPreviewView *)previewView
 completionCallback:(void (^)(NSString * _Nullable))completionCallback {
+    WS(weakSelf);
     self.previewView = previewView;
+    if ((self.previewDisplayRect.size.width == 0) || (self.previewDisplayRect.size.height == 0))
+        self.previewDisplayRect = previewView.frame; //default
     BOOL isConnected = [[MFiConnectionStateAdapter sharedInstance] connected];
     if (isConnected) {
         //NSDictionary *connectionInfo = [[MFiConnectionStateAdapter sharedInstance] getConnectionStatus];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            BOOL ret = [self.decoder openCodec];
-            if (!ret) {
-                if(completionCallback != nil) {
-                    completionCallback(@"Open Yuneec Decoder failed");
-                    return;
-                }
-            }
-            [self.cameraStreamTransfer openCameraSteamDataTransfer];
+            [weakSelf stopDisplayVideo];
+            [[MediaPlayer sharedInstance] stop];
+            [[MediaPlayer sharedInstance] destroy];
+            weakSelf.isCompressData = YES;
+            [[MediaPlayer sharedInstance] updateConnectType:YuneecDataTransferConnectionTypeMFi];
+            [[MediaPlayer sharedInstance] create:YES LowDelay:NO];
+            [[MediaPlayer sharedInstance] start];
+            [weakSelf startDisplayVideo];
         });
     }
     else {
@@ -57,134 +66,128 @@ completionCallback:(void (^)(NSString * _Nullable))completionCallback {
                 completionCallback(@"No Connection");
             }
         });
-        [self.decoder closeCodec];
+        [weakSelf stopDisplayVideo];
         [self.previewView clearFrame];
     }
 }
 
 - (void)stopVideo:(void (^)(NSString * _Nullable))completionCallback {
+    WS(weakSelf);
     BOOL isConnected = [[MFiConnectionStateAdapter sharedInstance] connected];
         if (isConnected) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 if(completionCallback != nil) {
                     completionCallback(@"Stop Video Successful");
                 }
-                [self.decoder closeCodec];
-                [self.cameraStreamTransfer closeCameraStreamDataTransfer];
+                [weakSelf stopDisplayVideo];
             });
         }
     else {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            [self.decoder closeCodec];
+            [weakSelf stopDisplayVideo];
             [self.previewView clearFrame];
         });
     }
 }
 
-#pragma mark - YuneecCameraStreamDataTransferDelegate
+- (void) updateDisplayRect:(CGRect) displayRect {
+    self.previewDisplayRect = displayRect;
+    if(_mainVideoView != nil) {
+        [_mainVideoView updateLayer:self.previewDisplayRect];
+    }
+}
+#pragma mark - MediaPlayerDelegate
 
-- (void)cameraStreamDataTransfer:(YuneecCameraStreamDataTransfer *) cameraStreamDataTransfer
-              didReceiveH264Data:(NSData *) h264Data
-                        keyFrame:(BOOL) keyFrame
-              decompassTimeStamp:(int64_t) decompassTimeStamp
-                presentTimeStamp:(int64_t) presentTimeStamp
-                       extraData:(NSData * __nullable) extraData
-{
-    [self.decoder decodeVideoFrame:h264Data
-                decompassTimeStamp:decompassTimeStamp
-                  presentTimeStamp:presentTimeStamp];
+- (void)mediaPlayer:(MediaPlayer *)mediaPlayer clearDisplay:(BOOL)bClear {
+    if((bClear) && (_mainVideoView != nil)) {
+        [_mainVideoView clear];
+    }
 }
 
-#pragma mark - YuneecDecoderDelegate
+- (void)mediaPlayer:(MediaPlayer *)mediaPlayer displaySampleVideoFrame:(YuneecSampleVideoFrame *)sampleFrame {
+    const BOOL isPipVideo = sampleFrame.isPipVideo;
+    if(!isPipVideo) {
+        if(_isCompressData != sampleFrame.bIsCompressedData) {
+            if(_mainVideoView != nil) {
+                [_mainVideoView clear];
+            }
+            _isCompressData = sampleFrame.bIsCompressedData;
+         }
 
-static uint64_t preDisplayTime = 0;
-static const uint64_t displayInternal = 20;
+        if(_mainVideoView != nil) {
+            [_mainVideoView play:sampleFrame.sampleBuffer];
+        }
+    }
+    else {
+        if(_pipVideoView != nil) {
+            [_pipVideoView play:sampleFrame.sampleBuffer];
+        }
+    }
+}
 
-- (void)decoder:(YuneecDecoder *) decoder didDecoderVideoFrame:(YuneecRawVideoFrame *) rawVideoFrame {
-    uint64_t currentTime = [[NSDate date] timeIntervalSince1970]*1000;
-    if (currentTime - preDisplayTime > displayInternal) {
+- (void)mediaPlayer:(MediaPlayer *)mediaPlayer displayYuvFrame:(YuneecYUVFrame *)yuvFrame {
+
+}
+
+- (void)mediaPlayer:(MediaPlayer *)mediaPlayer didChangeResolution:(uint32_t)width Height:(uint32_t)height {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.mainVideoView != nil) {
+            [_mainVideoView updateLayer:self.previewDisplayRect];
+        }
+    });
+}
+
+- (void)mediaPlayer:(MediaPlayer *)mediaPlayer sendStreamBuffer:(CMSampleBufferRef)sampleBufferRef IsIDR:(BOOL)isIDR {
+
+}
+
+
+#pragma mark - get & set
+
+- (void)initDisplayVideoView {
+    if(_mainVideoView == nil) {
+        // create buffer play view
+        _mainVideoView = [[VideoBufferPlayView alloc]initWithFrame:self.previewView.frame];
+        [_mainVideoView createLayer];
+    }
+    if(![self.mainVideoView isDescendantOfView:self.previewView]) {
+        [self.previewView insertSubview:self.mainVideoView atIndex:0];
+    }
+}
+
+- (void)removeDisplayVideoView {
+    if(_mainVideoView != nil) {
+        [_mainVideoView removeLayer];
+        [_mainVideoView removeFromSuperview];
+        _mainVideoView = nil;
+    }
+}
+
+- (void)startDisplayVideo {
+    [self controlDisplay:YES HWDisplay:YES];
+    [[MediaPlayer sharedInstance] addDelegate:self];
+}
+
+- (void)stopDisplayVideo {
+    [[MediaPlayer sharedInstance] removeDelegate:self];
+    [self controlDisplay:NO HWDisplay:YES];
+}
+
+- (void)controlDisplay:(BOOL)bEnable HWDisplay:(BOOL)bHardware {
+    if(bEnable && bHardware){
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self renderVideoFrame:rawVideoFrame];
-            preDisplayTime = currentTime;
+            [self initDisplayVideoView];
+        });
+    }
+    else if(!bEnable && !bHardware) {
+        [self.previewView clearFrame];
+    }
+    else if(_mainVideoView != nil) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeDisplayVideoView];
         });
     }
 }
 
-- (void)renderVideoFrame:(YuneecRawVideoFrame *) rawVideoFrame {
-    const uint32_t yFrameSize = rawVideoFrame.width * rawVideoFrame.height;
-    uint32_t bufferSize = yFrameSize * 3 / 2 + 1;
-    int8_t *buffer = (int8_t *)malloc(bufferSize);
-    uint32_t bufferIndex = 0;
-
-    uint32_t lineSize0 = (uint32_t)[rawVideoFrame.lineSizeArray[0] integerValue];
-    uint8_t *yBuffer = (uint8_t *)[rawVideoFrame.frameDataArray[0] bytes];
-
-    uint32_t lineSize1 = (uint32_t)[rawVideoFrame.lineSizeArray[1] integerValue];
-    uint8_t *uBuffer = (uint8_t *)[rawVideoFrame.frameDataArray[1] bytes];
-
-    uint32_t lineSize2 = (uint32_t)[rawVideoFrame.lineSizeArray[2] integerValue];
-    uint8_t *vBuffer = (uint8_t *)[rawVideoFrame.frameDataArray[2] bytes];
-
-    ///< copy y data
-    if(lineSize0 == rawVideoFrame.width) {
-        bufferIndex = yFrameSize;
-        memcpy(buffer, yBuffer, bufferIndex);
-    }
-    else {
-        for (uint32_t i = 0; i < rawVideoFrame.height; i++) {
-            memcpy(buffer + bufferIndex, yBuffer + i * lineSize0, rawVideoFrame.width);
-            bufferIndex += rawVideoFrame.width;
-        }
-    }
-
-    ///< copy u data
-    if(lineSize1 == rawVideoFrame.width/2) {
-        memcpy(buffer + bufferIndex, uBuffer, yFrameSize/4);
-        bufferIndex += yFrameSize/4;
-    }
-    else {
-        for (uint32_t i = 0; i < rawVideoFrame.height/2; i++) {
-            memcpy(buffer + bufferIndex, uBuffer + i * lineSize1, rawVideoFrame.width/2);
-            bufferIndex += rawVideoFrame.width/2;
-        }
-    }
-
-    ///< copy v data
-    if(lineSize2 == rawVideoFrame.width/2) {
-        memcpy(buffer + bufferIndex, vBuffer, yFrameSize/4);
-        bufferIndex += yFrameSize/4;
-    }
-    else {
-        for (uint32_t i = 0; i < rawVideoFrame.height/2; i++) {
-            memcpy(buffer + bufferIndex, vBuffer + i * lineSize2, rawVideoFrame.width/2);
-            bufferIndex += rawVideoFrame.width/2;
-        }
-    }
-
-    [self.previewView displayYUV420pData:buffer
-                                   width:rawVideoFrame.width
-                                  height:rawVideoFrame.height
-                                pixelFmt:YuneecPreviewPixelFmtTypeI420];
-    free(buffer);
-}
-
-#pragma mark - get & set
-
-- (YuneecCameraStreamDataTransfer *)cameraStreamTransfer {
-    if (_cameraStreamTransfer == nil) {
-        _cameraStreamTransfer = [YuneecDataTransferManager sharedInstance].streamDataTransfer;
-        _cameraStreamTransfer.cameraStreamDelegate = self;
-        _cameraStreamTransfer.enableLowDelay = YES;
-    }
-    return _cameraStreamTransfer;
-}
-
-- (YuneecDecoder *)decoder {
-    if (_decoder == nil) {
-        BOOL enableLowDelay = YES;
-        _decoder = createYuneecDecoder(self, NO, enableLowDelay);
-    }
-    return _decoder;
-}
 @end
 

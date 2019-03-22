@@ -37,6 +37,9 @@
 		D8B0900E212D337C00006BC5 /* MFiCameraAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B0900C212D337C00006BC5 /* MFiCameraAdapter.m */; };
 		D8B09011212D33AA00006BC5 /* MFiMediaDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B0900F212D33A900006BC5 /* MFiMediaDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8B09012212D33AA00006BC5 /* MFiMediaDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B09010212D33AA00006BC5 /* MFiMediaDownload.m */; };
+		D8ED246C2227A4AC0072660F /* YuneecMediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8ED246B2227A4AC0072660F /* YuneecMediaPlayer.framework */; };
+		D8ED24702227A5D00072660F /* VideoBufferPlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8ED246E2227A5D00072660F /* VideoBufferPlayView.h */; };
+		D8ED24712227A5D00072660F /* VideoBufferPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ED246F2227A5D00072660F /* VideoBufferPlayView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +75,9 @@
 		D8B0900C212D337C00006BC5 /* MFiCameraAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFiCameraAdapter.m; sourceTree = "<group>"; };
 		D8B0900F212D33A900006BC5 /* MFiMediaDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFiMediaDownload.h; sourceTree = "<group>"; };
 		D8B09010212D33AA00006BC5 /* MFiMediaDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFiMediaDownload.m; sourceTree = "<group>"; };
+		D8ED246B2227A4AC0072660F /* YuneecMediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YuneecMediaPlayer.framework; sourceTree = "<group>"; };
+		D8ED246E2227A5D00072660F /* VideoBufferPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoBufferPlayView.h; sourceTree = "<group>"; };
+		D8ED246F2227A5D00072660F /* VideoBufferPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoBufferPlayView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8ED246C2227A4AC0072660F /* YuneecMediaPlayer.framework in Frameworks */,
 				9BE6123E21E3CC1800684859 /* FFMpegDemuxer.framework in Frameworks */,
 				9BE6123F21E3CC1800684859 /* YuneecCameraSDK.framework in Frameworks */,
 				9BE6124021E3CC1800684859 /* YuneecDecoder.framework in Frameworks */,
@@ -120,6 +127,7 @@
 		083C905520939D5200537818 /* MFiAdapter */ = {
 			isa = PBXGroup;
 			children = (
+				D8ED246D2227A5D00072660F /* VideoBufferPlay */,
 				9B97830221FFB56D005D193A /* MFiPreviewViewAdapter.h */,
 				9B97830121FFB56D005D193A /* MFiPreviewViewAdapter.m */,
 				083C905620939D5200537818 /* MFiAdapter.h */,
@@ -143,6 +151,7 @@
 		085A4E902093A43100A9565E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D8ED246B2227A4AC0072660F /* YuneecMediaPlayer.framework */,
 				9BE6123621E3CC1800684859 /* BaseFramework.framework */,
 				9BE6123721E3CC1800684859 /* FFMpegDecoder.framework */,
 				9BE6123121E3CC1700684859 /* FFMpegDemuxer.framework */,
@@ -162,6 +171,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D8ED246D2227A5D00072660F /* VideoBufferPlay */ = {
+			isa = PBXGroup;
+			children = (
+				D8ED246E2227A5D00072660F /* VideoBufferPlayView.h */,
+				D8ED246F2227A5D00072660F /* VideoBufferPlayView.m */,
+			);
+			path = VideoBufferPlay;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -176,6 +194,7 @@
 				9B97830421FFB56E005D193A /* MFiPreviewViewAdapter.h in Headers */,
 				08CDA79E2098A2F1005702F9 /* MFiConnectionStateAdapter.h in Headers */,
 				D8053E9A2159FF080046596C /* MFiOtaAdapter.h in Headers */,
+				D8ED24702227A5D00072660F /* VideoBufferPlayView.h in Headers */,
 				D8B09011212D33AA00006BC5 /* MFiMediaDownload.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,6 +269,7 @@
 			files = (
 				D8053E942159CBD60046596C /* MFiOtaAdapter.m in Sources */,
 				086D32D020B70163006840C1 /* MFiRemoteControllerAdapter.m in Sources */,
+				D8ED24712227A5D00072660F /* VideoBufferPlayView.m in Sources */,
 				D8728A2A215B527700137272 /* MFiHttp.m in Sources */,
 				D8B09012212D33AA00006BC5 /* MFiMediaDownload.m in Sources */,
 				9B97830321FFB56E005D193A /* MFiPreviewViewAdapter.m in Sources */,

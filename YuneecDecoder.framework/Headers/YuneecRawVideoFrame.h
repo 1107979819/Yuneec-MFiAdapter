@@ -14,6 +14,7 @@
 @property (nonatomic, readonly) uint32_t                height;
 @property (nonatomic, readonly) uint64_t                timeStamp;      ///< 100ns
 @property (nonatomic, readonly) uint32_t                duration;       ///< 100ns
+@property (nonatomic, readwrite) BOOL                   isPipVideo;
 
 @property (strong, nonatomic, readonly) NSArray         *lineSizeArray;
 @property (strong, nonatomic, readonly) NSArray         *frameDataArray;

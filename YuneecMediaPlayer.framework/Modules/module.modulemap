@@ -1,0 +1,6 @@
+framework module YuneecMediaPlayer {
+  umbrella header "YuneecMediaPlayer.h"
+
+  export *
+  module * { export * }
+}
